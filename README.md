@@ -5,7 +5,7 @@ agents on NVIDIA Jetson Thor
 
 ## Demo Overview
 
-The NVIDIA VSS (Video search and summarizatio) provides
+The NVIDIA VSS (Video search and summarization) provides
 developers with the reference architecture to build and deploy video
 analytics AI agents to perform contextualized video summarization, Q&A,
 and real-time alerts by analyzing large quantities of live camera stream
