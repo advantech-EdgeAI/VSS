@@ -63,8 +63,7 @@ After flashing your Thor, if JetPack is not already installed, then install thro
 
 ```bash
 sudo apt update
-sudo apt install
-nvidia-jetpack
+sudo apt install -y nvidia-jetpack
 ```
 
 Then configure docker to run without sudo.
