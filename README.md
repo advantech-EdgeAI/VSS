@@ -1,138 +1,100 @@
-# Title: VSS (Video-Search-and-Summarization) - A Video Analytics AI Agents at the Edge
+# Video Search and Summarization (VSS)
 
-Unlock insights from petabytes of visual data with video analytics AI
-agents on NVIDIA Jetson Thor
+The NVIDIA VSS (Video Search and Summarization) provides developers with a reference architecture to build and deploy video analytics AI agents on edge devices like the Jetson Thor. 
 
-## Demo Overview
+This system enables contextualized video summarization, Q&A, and real-time alerts by analyzing large quantities of live camera streams and recorded video.
 
-The NVIDIA VSS (Video search and summarization) provides
-developers with the reference architecture to build and deploy video
-analytics AI agents to perform contextualized video summarization, Q&A,
-and real-time alerts by analyzing large quantities of live camera stream
-and recorded video.
+It serves as an enterprise co-pilot to automate the collection and understanding of analytics, acting as an intelligent add-on to existing computer vision pipelines.
 
-## VSS Key Points
+## Key Features
 
--   VSS enables AI agents across all industries
+- **Core Capabilities**: Summarization, Q&A, Event Verification, and Low Latency Alerts.
+- **VLM Integration**: Utilizes the Cosmos Reason 1.1 VLM for advanced reasoning.
+- **Event Verification**: Enhances computer vision pipelines by verifying detected events using natural language logic.
+- **Edge Deployment**: Optimized for deployment on NVIDIA Jetson Thor.
 
--   4 main capabilities including 
-    > Summarization, Q&A, Event Verification, Low Latency Alerts
+## System Architecture
 
--   A new feature in 2.4 allows VSS to be used as an intelligent add-on to any computer vision pipeline for event verification.
+The demo consists of two main integrated components:
 
--   An enterprise co-pilot to automate collection + understanding of analytics
+1. **Computer Vision Pipeline**: Uses DeepStream and GroundDino to detect objects. If the number of objects exceeds a threshold, it outputs a video clip.
+2. **VSS (Video Search & Summarization)**: Processes the clips using the VLM to answer user-defined Yes/No questions. These answers are converted into alerts or dashboard insights.
 
--   We have examples of VSS partner applications for smart cities, warehouses, and live broadcasting.
+<a href="https://youtu.be/sddRzZQ7aKM"><img src="./media/images/demo.gif"></a>
 
--   Deploy on the edge (Jetson Thor in this case).
+**Workflow**
 
+1. **Detection**: The pipeline finds important events in the video stream.
+2. **Reasoning**: VSS processes the clip and answers questions (True/False states).
+3. **Insight**: Responses generate low-latency alerts displayed on the web dashboard.
 
-## 
-## Technical Details 
+## Installation Guide
 
-The demo consists of two main parts-
+### 1. Prerequisites
 
-1)  Computer Vision Pipeline
-
-2)  VSS
-
-The computer vision pipeline is an example DeepStream detection pipeline
-using GroundDino that will take in a video, run detection and then
-output clips when the number of detected objects is greater than a set
-threshold. The purpose of this pipeline is to find the most important
-events from the video that need to be inspected by VSS with a Vision
-Language Model.
-
-VSS will then process each small clip using the VLM Cosmos Reason 1.1 by
-answering a set of yes/no questions defined by the user. These responses
-are converted to True/False states for each question and can be used to
-generate low latency alerts to a user. In this demo they will be
-displayed on a web dashboard. Once the short clip has been processed by
-VSS, you can ask more detailed follow questions.
-
-When the demo is launched, there will be two web UIs to interact with
-it. One Web UI will control the detection pipeline to generate clips of
-interest from the input video and the other will be the VSS UI to
-receive the VLM based alerts and insights on the short clips.
-
-## Setup & Installation
-
-**Software Setup**
-
-After flashing your Thor, if JetPack is not already installed, then install through apt.
+Ensure JetPack is installed and Docker is configured to run without `sudo`.
 
 ```bash
+# Install JetPack if needed
 sudo apt update
 sudo apt install -y nvidia-jetpack
-```
 
-Then configure docker to run without sudo.
-
-```bash
+# Configure Docker permissions
 sudo usermod -aG docker $USER
 newgrp docker
 ```
 
-Download all demo content, and place them into ~/vss_demo_downloads folder.
+### 2. Download Essential Data
+
+Create a directory for the demo and download the required container images and models.
 
 ```bash
+# Create demo folder
 mkdir -p ~/vss_demo_downloads
+
+# Copy data from the shared volume (Example command)
 sudo docker run --name share-volume-vss ispsae/share-volume-vss
 sudo docker cp share-volume-vss:/data/. ~/vss_demo_downloads
 
-```
-
-Load the docker images
-
-```bash
+# Load Docker images
 docker load -i ~/vss_demo_downloads/alert-inspector-ui.tar.gz
 docker load -i ~/vss_demo_downloads/cv-ui.tar.gz
 docker load -i ~/vss_demo_downloads/nv-cv-event-detector.tar.gz
 docker load -i ~/vss_demo_downloads/via-engine.tar.gz
 ```
 
-Setup the demo folder and Cosmos-Reason model
+### 3. Setup Demo Environment
+
+Extract the demo scripts and model weights.
 
 ```bash
+# Extract demo folder
 tar -xzf ~/vss_demo_downloads/vss_demo.tar.gz -C ~/
+
+# Extract Cosmos-Reason model
 tar -xzf ~/vss_demo_downloads/Cosmos-Reason1.1-7B.tar.gz -C ~/vss_demo/models/
 ```
 
-Inside the ~/vss_demo folder is a .env. Open this file and verify the
-MODEL_ROOT_DIR and MODEL_PATH environment variables are pointing to
-valid paths to access the Cosmos-Reason1.1-7B model weights. No change
-is needed if your user is set to "ubuntu".
+Note: Check the `.env` file in `~/vss_demo` to ensure `MODEL_ROOT_DIR` points to the correct path. No change is usually needed if the user is "ubuntu".
 
-### Launching the demo
+## Usage / Quick Start
 
-Docker compose will be used to run the demo. This will bring up all the
-containers to run the web UIs, computer vision pipeline and VSS.
+### Start the Application
+
+Launch the entire pipeline using Docker Compose. Note that the first launch may take 15-20 minutes to fully load.
 
 ```bash
 cd ~/vss_demo
 docker compose up
 ```
 
-It may take 15-20 minutes to fully load the demo the first time it is launched.
+Check your terminal output. When you see `Running on local URL: http://0.0.0.0:7862`, the system is ready.
 
-Once the CV UI has launched, the demo should be fully loaded. Check your terminal output for the following lines to verify the CV UI has launched.
+### Access the Web UI
 
-```
-cv-ui-1                 | *Running on local URL:  <http://0.0.0.0:7862>
-cv-ui-1                 |* To create a public link, set `share=True` in `launch()`.
-via-server-1            | INFO:     127.0.0.1:47148 - "GET /health/live HTTP/1.1" 200 OK
-nv-cv-event-detector-1  | INFO:     127.0.0.1:47026 - "GET /health HTTP/1.1" 200 OK
-```
+Two web interfaces are available to interact with the demo:
 
-### Running the demo
-
-Two web UIs are used to interact with the demo. These web UIs can be
-accessed directly from the Thor through a web browser or from a separate
-system connected to the same network.
-
-----------------------------------
-##### CV UI - http://\<jetson_ip\>:7862/
------------------------------------ 
-##### VSS UI - http://\<jetson_ip\>:7860/
------------------------
-
+- **CV UI (Control Pipeline)**: `http://<jetson_ip>:7862/`
+    - Use this to generate clips of interest from the input video.
+- **VSS UI (Insights & Alerts)**: `http://<jetson_ip>:7860/`
+    - Use this to receive VLM-based alerts and ask detailed follow-up questions.
