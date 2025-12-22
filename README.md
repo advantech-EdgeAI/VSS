@@ -20,13 +20,13 @@ The demo consists of two main integrated components:
 1. **Computer Vision Pipeline**: Uses DeepStream and GroundDino to detect objects. If the number of objects exceeds a threshold, it outputs a video clip.
 2. **VSS (Video Search & Summarization)**: Processes the clips using the VLM to answer user-defined Yes/No questions. These answers are converted into alerts or dashboard insights.
 
-<a href="https://youtu.be/sddRzZQ7aKM"><img src="./media/images/demo.gif"></a>
-
 **Workflow**
 
 1. **Detection**: The pipeline finds important events in the video stream.
 2. **Reasoning**: VSS processes the clip and answers questions (True/False states).
 3. **Insight**: Responses generate low-latency alerts displayed on the web dashboard.
+
+<a href="https://youtu.be/sddRzZQ7aKM"><img src="./media/images/demo.gif"></a>
 
 ## Installation Guide
 
