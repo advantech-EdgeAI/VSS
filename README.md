@@ -32,18 +32,16 @@ The demo consists of two main integrated components:
 
 ### 1. Prerequisites
 
-Ensure JetPack is installed and Docker is configured to run without `sudo`.
+Ensure JetPack and Docker are installed.
 
 ```bash
 # Install JetPack if needed
 sudo apt update
 echo -e '\nPackage: nvidia-l4t-*\nPin: version 38.2.0-20250821174705\nPin-Priority: 999' | sudo tee -a /etc/apt/preferences.d/nvidia-repo-pin
 sudo apt install -y nvidia-jetpack
-
-# Configure Docker permissions
-sudo usermod -aG docker $USER
-newgrp docker
 ```
+
+Follow [the guide](https://github.com/advantech-EdgeAI/VSS/issues/2) to install Docker.
 
 ### 2. Download Essential Data
 
