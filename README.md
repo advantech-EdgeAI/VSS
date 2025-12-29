@@ -37,6 +37,7 @@ Ensure JetPack is installed and Docker is configured to run without `sudo`.
 ```bash
 # Install JetPack if needed
 sudo apt update
+echo -e '\nPackage: nvidia-l4t-*\nPin: version 38.2.0-20250821174705\nPin-Priority: 999' | sudo tee -a /etc/apt/preferences.d/nvidia-repo-pin
 sudo apt install -y nvidia-jetpack
 
 # Configure Docker permissions
