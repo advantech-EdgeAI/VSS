@@ -6,6 +6,8 @@ This system enables contextualized video summarization, Q&A, and real-time alert
 
 It serves as an enterprise co-pilot to automate the collection and understanding of analytics, acting as an intelligent add-on to existing computer vision pipelines.
 
+![](media/images/overview.png)
+
 ## Key Features
 
 - **Core Capabilities**: Summarization, Q&A, Event Verification, and Low Latency Alerts.
