@@ -64,12 +64,14 @@ Launch the entire pipeline using Docker Compose.
 Note that the first launch may take 5-6 minutes to fully load.
 
 Check your terminal output. When you see the following logs, it shows VSS is ready.
-> via-server-1         | ***********************************************************
-> via-server-1         | VIA Server loaded
-> via-server-1         | Backend is running at http://0.0.0.0:8100
-> via-server-1         | Frontend is running at http://0.0.0.0:9100
-> via-server-1         | Press ctrl+C to stop
-> via-server-1         | ***********************************************************
+```
+via-server-1         | ***********************************************************
+via-server-1         | VIA Server loaded
+via-server-1         | Backend is running at http://0.0.0.0:8100
+via-server-1         | Frontend is running at http://0.0.0.0:9100
+via-server-1         | Press ctrl+C to stop
+via-server-1         | ***********************************************************
+```
 
 
 ### Access the Web UI
