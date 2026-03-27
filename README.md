@@ -30,9 +30,9 @@ The demo consists of two main integrated components:
 
 <a href="https://youtu.be/sddRzZQ7aKM"><img src="./media/images/demo.gif"></a>
 
-## Installation Guide
+## Quick Start Guide
 
-### 1. Prerequisites
+### Prerequisites
 
 Ensure JetPack and Docker are installed.
 
@@ -45,57 +45,43 @@ sudo apt install -y nvidia-jetpack
 
 Follow [the guide](https://github.com/advantech-EdgeAI/VSS/issues/2) to install Docker.
 
-### 2. Download Essential Data
-
-Create a directory for the demo and download the required container images and models.
-
-```bash
-# Create demo folder
-mkdir -p ~/vss_demo_downloads
-
-# Copy data from the shared volume (Example command)
-sudo docker run --name share-volume-vss ispsae/share-volume-vss
-sudo docker cp share-volume-vss:/data/. ~/vss_demo_downloads
-
-# Load Docker images
-docker load -i ~/vss_demo_downloads/alert-inspector-ui.tar.gz
-docker load -i ~/vss_demo_downloads/cv-ui.tar.gz
-docker load -i ~/vss_demo_downloads/nv-cv-event-detector.tar.gz
-docker load -i ~/vss_demo_downloads/via-engine.tar.gz
-```
-
-### 3. Setup Demo Environment
-
-Extract the demo scripts and model weights.
+### Download docker images
+Download all docker images at once.
 
 ```bash
-# Extract demo folder
-tar -xzf ~/vss_demo_downloads/vss_demo.tar.gz -C ~/
-
-# Extract Cosmos-Reason model
-tar -xzf ~/vss_demo_downloads/Cosmos-Reason1.1-7B.tar.gz -C ~/vss_demo/models/
+# run the docker pull scripts
+./docker-pull.sh
 ```
-
-Note: Check the `.env` file in `~/vss_demo` to ensure `MODEL_ROOT_DIR` points to the correct path. No change is usually needed if the user is "ubuntu".
-
-## Usage / Quick Start
 
 ### Start the Application
-
-Launch the entire pipeline using Docker Compose. Note that the first launch may take 15-20 minutes to fully load.
+Go to VSS folder, and bring it up.
 
 ```bash
-cd ~/vss_demo
+cd local_deployment_single_gpu/
 docker compose up
 ```
+Launch the entire pipeline using Docker Compose. 
+Note that the first launch may take 5-6 minutes to fully load.
 
-Check your terminal output. When you see `Running on local URL: http://0.0.0.0:7862`, the system is ready.
+Check your terminal output. When you see the following logs, it shows VSS is ready.
+> via-server-1         | ***********************************************************
+> via-server-1         | VIA Server loaded
+> via-server-1         | Backend is running at http://0.0.0.0:8100
+> via-server-1         | Frontend is running at http://0.0.0.0:9100
+> via-server-1         | Press ctrl+C to stop
+> via-server-1         | ***********************************************************
+
 
 ### Access the Web UI
 
 Two web interfaces are available to interact with the demo:
+- **VSS UI (Full Function Version)**: `http://<jetson_ip>:9100/`
 
-- **CV UI (Control Pipeline)**: `http://<jetson_ip>:7862/`
-    - Use this to generate clips of interest from the input video.
-- **VSS UI (Insights & Alerts)**: `http://<jetson_ip>:7860/`
-    - Use this to receive VLM-based alerts and ask detailed follow-up questions.
+### Stop VSS and Clean out cache data
+```bash
+ctrl-c # stop vss
+docker compose down
+sudo ./sys_cache_cleaner.sh
+# wait for 5 sec
+ctrl-c # exit cleaner
+```
