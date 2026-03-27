@@ -1,0 +1,12 @@
+{
+  "name": "Python & Bash Lab",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",      // For Python debugging
+        "mads-hartmann.bash-debug" // For Bash debugging
+      ]
+    }
+  }
+}
+
