@@ -30,7 +30,7 @@ services:
       VLLM_PORT: ${VLLM_PORT:-8007}
     volumes:
       - /etc:/tmp/etc:ro
-      - /opt/advantech:/tmp/opt/advantech:ro
+      - /opt:/tmp/opt:ro
     healthcheck:
       test:
       - CMD-SHELL
@@ -58,7 +58,7 @@ services:
     - ${RERANK_PORT:-8005}:${RERANK_PORT:-8005}
     volumes:
       - /etc:/tmp/etc:ro
-      - /opt/advantech:/tmp/opt/advantech:ro
+      - /opt:/tmp/opt:ro
     healthcheck:
       test:
       - CMD-SHELL
