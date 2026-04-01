@@ -1,0 +1,16 @@
+# docker images
+./docker-pull.sh
+
+# start vss
+cd local_deployment_single_gpu/
+docker compose up 
+
+# stop vss and clean out cache data
+ctrl-c # stop vss
+docker compose down
+sudo ./sys_cache_cleaner.sh
+# wait for 5 sec
+ctrl-c # exit cleaner
+
+
+
