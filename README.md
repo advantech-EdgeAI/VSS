@@ -1,39 +1,44 @@
-# VSS Event Reviewer
+# Video Search and Summarization (VSS)
 
-The NVIDIA VSS (Video Search and Summarization) Event Reviewer helps developers create smart video AI agents for edge devices. This project is specifically for the NVIDIA Jetson Thor.
-
-On the Jetson Thor, the system focuses on Event Review. It acts as a smart assistant for your existing computer vision pipelines. It helps you check if detected events are real and provides fast alerts.
+The NVIDIA VSS project provides a reference architecture for building and deploying intelligent video analytics AI agents on edge devices. This system allows you to manage large amounts of video data by providing summaries, answering questions about video content, and sending real-time alerts.
 
 ## Key Features
 
-- **Local Event Review**: Uses a Vision Language Model (VLM) to check video clips directly on the device.
-- **Yes/No Reasoning**: The system answers simple "Yes" or "No" questions about what is happening in the video.
-- **Low Latency Alerts**: Provides fast notifications when the VLM confirms a specific event.
-- **VLM Integration**: Specifically uses the Cosmos-Reason1 model for advanced visual reasoning.
+* **Video Summarization**: Automatically creates text summaries for long video files and live camera streams.
+* **Natural Language Q&A**: Allows users to ask specific questions about what is happening in the video (e.g., "What color was the car that entered at 2 PM?").
+* **Real-time Alerts**: Sends low-latency notifications based on user-defined events or "Yes/No" questions.
+* **VLM Integration**: Uses the **Cosmos-Reason2** Vision Language Model (VLM) for deep visual understanding and reasoning.
+* **Context-Aware RAG**: Employs a Retrieval-Augmented Generation (RAG) system with vector and graph databases to provide accurate and detailed answers.
 
 ## System Architecture
 
-The project has two main parts that work together:
+The system is built with two main pipelines that work together to process video data:
 
-- **Computer Vision (CV) Pipeline**: This part uses tools like Grounding DINO to find objects. When it detects something important, it creates a short video clip of the event.
-- **VSS Event Reviewer**: This part receives the video clip. It uses the VLM to answer your specific questions (for example: "Is the worker wearing a safety helmet?").
+### 1. Ingestion Pipeline
+This pipeline extracts visual information from the video.
+* **Sampling**: The system samples frames from video chunks.
+* **Captioning**: The VLM analyzes these frames to generate "dense captions" or scene descriptions.
+* **Metadata**: If enabled, a computer vision pipeline (using Grounding DINO) adds object IDs and masks to the visual data to improve accuracy.
+
+### 2. Retrieval Pipeline
+This pipeline manages the information extracted by the ingestion process.
+* **Indexing**: Captions and metadata are stored in vector and graph databases.
+* **Processing**: When you request a summary or ask a question, the system retrieves relevant data from the databases.
+* **Response Generation**: An LLM (Large Language Model) combines the retrieved information to produce a final summary or answer.
+
+![](media/images/overview.png)
 
 **Workflow**
 
-1. **Detection**: The CV pipeline monitors the stream and finds "clips of interest" based on your rules.
-2. **Verification**: VSS analyzes the clip and answers your "Yes/No" questions to verify the event.
-3. **Alert**: If the VLM confirms the event, an alert is sent to the dashboard for you to see.
+1.  **Ingestion**: Video files or RTSP live streams are processed into small chunks.
+2.  **Analysis**: The VLM generates detailed descriptions for every part of the video.
+3.  **Storage**: These descriptions are indexed and stored for fast searching.
+4.  **Interaction**: Users can generate a complete summary of the video or use the chat interface to gain specific insights.
+5.  **Alerting**: The system monitors the video for specific events and triggers alerts immediately when those events are detected.
 
-> [!NOTE]<!-- NOTE ALERT -->
-> For more information about system architecture of VSS, please refer to Nvidia's official manual for [VSS 2.4.0](https://docs.nvidia.com/vss/2.4.0/).
+## Installation Guide
 
-<a href="https://youtu.be/sddRzZQ7aKM"><img src="./media/images/demo.gif"></a>
-
-## Quick Start Guide
-
-### Prerequisites
-
-Ensure JetPack and Docker are installed.
+### 1. Install JetPack and Docker
 
 ```bash
 # Install JetPack if needed
@@ -44,7 +49,15 @@ sudo apt install -y nvidia-jetpack
 
 Follow [the guide](https://github.com/advantech-EdgeAI/VSS/issues/2) to install Docker.
 
-### Download docker images
+### 2. Clone the Repository
+
+```bash
+git clone https://github.com/advantech-EdgeAI/VSS.git
+cd VSS
+```
+
+### 3. Download Docker Images
+
 Download all docker images at once.
 
 ```bash
@@ -52,7 +65,10 @@ Download all docker images at once.
 ./docker-pull.sh
 ```
 
-### Start the Application
+## Usage / Quick Start
+
+### 1. Start the Application
+
 Go to VSS folder, and bring it up.
 
 ```bash
@@ -73,12 +89,14 @@ via-server-1         | *********************************************************
 ```
 
 
-### Access the Web UI
+### 2. Access the Web UI
 
-Two web interfaces are available to interact with the demo:
+A web interface is available to interact with the demo:
+
 - **VSS UI (Full Function Version)**: `http://<jetson_ip>:9100/`
 
-### Stop VSS and Clean out cache data
+### 3. Stop VSS and Clean Out Cache Data
+
 ```bash
 ctrl-c # stop vss
 docker compose down
