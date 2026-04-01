@@ -1,32 +1,31 @@
-# Video Search and Summarization (VSS)
+# VSS Event Reviewer
 
-The NVIDIA VSS (Video Search and Summarization) provides developers with a reference architecture to build and deploy video analytics AI agents on edge devices like the Jetson Thor. 
+The NVIDIA VSS (Video Search and Summarization) Event Reviewer helps developers create smart video AI agents for edge devices. This project is specifically for the NVIDIA Jetson Thor.
 
-This system enables contextualized video summarization, Q&A, and real-time alerts by analyzing large quantities of live camera streams and recorded video.
-
-It serves as an enterprise co-pilot to automate the collection and understanding of analytics, acting as an intelligent add-on to existing computer vision pipelines.
-
-![](media/images/overview.png)
+On the Jetson Thor, the system focuses on Event Review. It acts as a smart assistant for your existing computer vision pipelines. It helps you check if detected events are real and provides fast alerts.
 
 ## Key Features
 
-- **Core Capabilities**: Summarization, Q&A, Event Verification, and Low Latency Alerts.
-- **VLM Integration**: Utilizes the Cosmos Reason 1.1 VLM for advanced reasoning.
-- **Event Verification**: Enhances computer vision pipelines by verifying detected events using natural language logic.
-- **Edge Deployment**: Optimized for deployment on NVIDIA Jetson Thor.
+- **Local Event Review**: Uses a Vision Language Model (VLM) to check video clips directly on the device.
+- **Yes/No Reasoning**: The system answers simple "Yes" or "No" questions about what is happening in the video.
+- **Low Latency Alerts**: Provides fast notifications when the VLM confirms a specific event.
+- **VLM Integration**: Specifically uses the Cosmos-Reason1 model for advanced visual reasoning.
 
 ## System Architecture
 
-The demo consists of two main integrated components:
+The project has two main parts that work together:
 
-1. **Computer Vision Pipeline**: Uses DeepStream and GroundDino to detect objects. If the number of objects exceeds a threshold, it outputs a video clip.
-2. **VSS (Video Search & Summarization)**: Processes the clips using the VLM to answer user-defined Yes/No questions. These answers are converted into alerts or dashboard insights.
+- **Computer Vision (CV) Pipeline**: This part uses tools like Grounding DINO to find objects. When it detects something important, it creates a short video clip of the event.
+- **VSS Event Reviewer**: This part receives the video clip. It uses the VLM to answer your specific questions (for example: "Is the worker wearing a safety helmet?").
 
 **Workflow**
 
-1. **Detection**: The pipeline finds important events in the video stream.
-2. **Reasoning**: VSS processes the clip and answers questions (True/False states).
-3. **Insight**: Responses generate low-latency alerts displayed on the web dashboard.
+1. **Detection**: The CV pipeline monitors the stream and finds "clips of interest" based on your rules.
+2. **Verification**: VSS analyzes the clip and answers your "Yes/No" questions to verify the event.
+3. **Alert**: If the VLM confirms the event, an alert is sent to the dashboard for you to see.
+
+> [!NOTE]<!-- NOTE ALERT -->
+> For more information about system architecture of VSS, please refer to Nvidia's official manual for [VSS 2.4.0](https://docs.nvidia.com/vss/2.4.0/).
 
 <a href="https://youtu.be/sddRzZQ7aKM"><img src="./media/images/demo.gif"></a>
 
