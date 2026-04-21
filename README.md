@@ -69,6 +69,30 @@ Download all docker images at once.
 
 ### 1. Start the Application
 
+##### First-Time VSS Setup
+
+If this is your first time running VSS on your device, please connect to the internet and run the following commands:
+
+```bash
+export HF_HUB_OFFLINE=0
+export TRANSFORMERS_OFFLINE=0
+```
+
+Next, open the `VSS/local_deployment_single_gpu/.env` file and uncomment the line to enable your Hugging Face token:
+
+```bash
+# export NGC_API_KEY=abc123*** #api key to pull model from NGC. Add this if you are not using the jupyter notebooks
+# export NVIDIA_API_KEY="noapikeyset" #need a random string here to avoid bug in endpoint client library; actual key not needed as the endpoint is local
+export HF_TOKEN=<your_hugging_face_token> # <- Uncomment and update this line with your token.
+
+(remaining .env lines)
+```
+Once updated, follow the steps below to launch VSS.
+
+> Once VSS has successfully run for the first time, you can safely remove your Hugging Face token from the `.env` file and comment out the line. VSS no longer requires Hugging Face access, allowing you to run the application entirely offline. 
+
+##### Bring Up VSS
+
 Go to VSS folder, and bring it up.
 
 ```bash
@@ -104,3 +128,16 @@ sudo ./sys_cache_cleaner.sh
 # wait for 5 sec
 ctrl-c # exit cleaner
 ```
+
+## Troubleshooting
+
+### Memory Issues
+
+If you see errors about "KV cache" or "GPU memory utilization" when starting VSS, you need to change the `VLLM_GPU_MEMORY_UTILIZATION` value in your `.env` file.
+
+This number (from `0.0` to `1.0`) tells the system how much GPU memory to reserve for the AI model. Default: `0.3` (30% of your GPU memory).
+
+- If you see "KV cache memory not enough": 
+    - Increase the value (e.g., change `0.3` to `0.4` or `0.5`). This gives the model more memory to work with.
+- If you see "Free memory is less than desired":
+    - Decrease the value (e.g., change `0.5` to `0.4` or `0.3`). This leaves more free space for the system to boot up.
