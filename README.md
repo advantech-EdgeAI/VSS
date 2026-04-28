@@ -119,7 +119,11 @@ A web interface is available to interact with the demo:
 
 - **VSS UI (Full Function Version)**: `http://<jetson_ip>:9100/`
 
-### 3. Stop VSS and Clean Out Cache Data
+### 3. Try Out Examples
+
+In this [discussion post](https://github.com/advantech-EdgeAI/VSS/discussions/3), we share two examples for you to preview how VSS works in practice.
+
+### 4. Stop VSS and Clean Out Cache Data
 
 ```bash
 ctrl-c # stop vss
